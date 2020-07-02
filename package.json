@@ -4,7 +4,8 @@
   "description": "plano artístico api",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./src/servidor"
+    "start": "nodemon ./src/servidor",
+    "install": "npm install"
   },
   "author": "bragaus",
   "license": "ISC",
