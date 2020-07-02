@@ -27,7 +27,7 @@ function verificarToken(req, res, next) {
         
         // separando o bearer do token e recuperando o token
         const bearer = header.split(' ');
-        const token = bearer[1];   
+        const token = bearer[1];
 
         jwt.verify(token, process.env.NODE_KEY, (err) => {
             if(err){
