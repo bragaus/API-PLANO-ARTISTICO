@@ -29,7 +29,7 @@ function verificarToken(req, res, next) {
         const bearer = header.split(' ');
         const token = bearer[1];   
 
-        jwt.verify(token, 'your_jwt_secret', (err) => {
+        jwt.verify(token, process.env.NODE_KEY, (err) => {
             if(err){
                 res.status(403).send('token inválido');
             } else {
