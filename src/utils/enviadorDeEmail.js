@@ -1,5 +1,4 @@
 const nodemailer = require('nodemailer');
-const { CodeBuild } = require('aws-sdk');
 
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -7,16 +6,14 @@ const transporter = nodemailer.createTransport({
     secure: false,
     auth: {
         user: process.env.MENSAGEIRO_ORIGEM_EMAIL,
-        // pass: process.env.MENSAGEIRO_SENHA,
-        pass: 1
+        pass: process.env.MENSAGEIRO_SENHA,
     }
 });
 
 const enviarEmail = (titulo, corpo, retornar) => {
     const mailOptions = {
         from: process.env.MENSAGEIRO_ORIGEM_EMAIL,
-        // to: process.env.MENSAGEIRO_DESTINO_EMAIL,
-        to: 'mannoplay@gmail.com',
+        to: `${process.env.MENSAGEIRO_DESTINO_EMAIL}, ${process.env.MENSAGEIRO_DESTINO_EMAIL_COPIA}`,
         subject: titulo,
         text: corpo
     };

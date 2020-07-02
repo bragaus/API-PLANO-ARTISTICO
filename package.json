@@ -1,10 +1,10 @@
 {
   "name": "planoart",
   "version": "1.0.0",
-  "description": "plano art data base",
+  "description": "plano artístico api",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --inspect ./src/index.js"
+    "start": "nodemon ./src/servidor"
   },
   "author": "bragaus",
   "license": "ISC",
@@ -12,25 +12,17 @@
     "@mysql/xdevapi": "8.0.19",
     "aws-sdk": "^2.630.0",
     "bcrypt": "^4.0.1",
-    "body-parser": "^1.19.0",
     "celebrate": "^12.1.0",
-    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
-    "dotenv-safe": "^8.2.0",
     "express": "^4.17.1",
-    "express-fileupload": "^1.1.6",
     "express-form-data": "^2.0.12",
-    "express-mysql-session": "^2.1.4",
-    "express-session": "^1.17.1",
     "jsonwebtoken": "^8.5.1",
-    "mailgun-js": "^0.22.0",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
     "multer-s3": "^2.9.0",
     "mysql": "github:mysqljs/mysql",
     "nodemailer": "^6.4.10",
-    "nodemon": "^2.0.2",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0"

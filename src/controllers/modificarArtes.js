@@ -1,4 +1,3 @@
-// const consulta = require('../models/consulta');
 const conexao = require('../models/conexao');
 
 async function listarArtes(req, resultado) {

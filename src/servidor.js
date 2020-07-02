@@ -2,11 +2,11 @@ require('dotenv').config();
 const express = require('express');
 const http = require('http');
 const cors = require('cors');
-const router = require('./routes'); 
+const router = require('./rotas');
 const morgan = require('morgan');
 const { errors } = require('celebrate');
 const passport = require('passport');
-require('./autorizacao')(passport);
+require('./autenticacao')(passport);
 
 const app = express();
 const server = http.Server(app);
@@ -16,8 +16,11 @@ app.use(morgan('dev'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
-app.use(cors({credentials: true, origin: 'http://localhost:3000'}))
+app.use(cors({credentials: true, origin: process.env.ORIGIN }))
 app.use(router);
 app.use(errors());
-server.listen(3333);
+
+porto = process.env.PORT || 3000;
+server.listen(porto);
+
+console.log('navegando no porto: ' + porto)
