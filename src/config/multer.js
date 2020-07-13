@@ -102,7 +102,7 @@ module.exports = {
         if (allowedMimes.includes(file.mimetype)) {
             callBack(null, true);
         } else {
-            callBack(new Error('Entra com a porra do arquivo certo caralho )))(((((((--+)**'));
+            callBack(new Error('Arquivo inválido'));
         };
     },
 };

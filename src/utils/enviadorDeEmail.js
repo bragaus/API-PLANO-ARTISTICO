@@ -10,12 +10,18 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-const enviarEmail = (titulo, corpo, retornar) => {
+const enviarEmail = (titulo, corpo, arquivo, retornar) => {
+    console.log(arquivo)
     const mailOptions = {
         from: process.env.MENSAGEIRO_ORIGEM_EMAIL,
-        to: `${process.env.MENSAGEIRO_DESTINO_EMAIL}, ${process.env.MENSAGEIRO_DESTINO_EMAIL_COPIA}`,
+        // to: `${process.env.MENSAGEIRO_DESTINO_EMAIL}, ${process.env.MENSAGEIRO_DESTINO_EMAIL_COPIA}`,
+        to: process.env.MENSAGEIRO_DESTINO_EMAIL_COPIA,
         subject: titulo,
-        text: corpo
+        text: corpo,
+        attachments: [{
+            filename: 'teste.PNG',
+            path: 'D:\Capturar.PNG'
+        }]
     };
 
     // Função que, efetivamente, envia o email.

@@ -123,17 +123,19 @@ router.post('/postarArteFrenteVerso',
 
 // Rota para enviar email
 router.post('/email', (req, res) => {
-    const { email, corpo } = req.body
+    console.log(req.body)
 
-    enviarEmail(email, corpo, (erro, info) => {
-        if (erro) {
-            console.log('ERRO: ', erro);
-            return res.status(500).json({ message: erro.message || 'Internal Error' });
-        }
+    // const { email, corpo, arquivo } = req.body
 
-        console.log(info)
-        return res.json(info);
-    });
+    // enviarEmail(email, corpo, arquivo, (erro, info) => {
+    //     if (erro) {
+    //         console.log('ERRO: ', erro);
+    //         return res.status(500).json({ message: erro.message || 'Internal Error' });
+    //     }
+
+    //     console.log(info)
+    //     return res.json(info);
+    // });
     
 });
 

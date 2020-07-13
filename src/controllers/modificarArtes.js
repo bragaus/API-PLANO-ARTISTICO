@@ -14,7 +14,14 @@ async function listarArtes(req, resultado) {
             ID
         } = arte
            
-        conexao.query(`UPDATE postagem SET esquerda = ${esquerda}, direita = ${direita}, cima = ${cima}, baixo = ${baixo}, largura = ${largura} WHERE ID = ${ID}`, (req, res) => {
+        var dados = [
+            [direita, esquerda, cima, baixo, largura, ID]
+        ]
+        // conexao.query(`UPDATE postagem SET esquerda = ${esquerda}, direita = ${direita}, cima = ${cima}, baixo = ${baixo}, largura = ${largura} WHERE ID = ${ID}`, (req, res) => {
+        //     return resultado.json(res)
+        // })
+
+        conexao.query(`UPDATE postagem SET esquerda = ?, direita = ?, cima = ?, baixo = ?, largura = ? WHERE ID = ?`, dados, (req, res) => {
             console.log(res)
         })
     })
