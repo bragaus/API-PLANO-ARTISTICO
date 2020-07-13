@@ -122,21 +122,27 @@ router.post('/postarArteFrenteVerso',
 );
 
 // Rota para enviar email
-router.post('/email', (req, res) => {
-    console.log(req.body)
+router.post('/email',
 
-    // const { email, corpo, arquivo } = req.body
+    // upload
+    multer(multerConfig).single('file'),
 
-    // enviarEmail(email, corpo, arquivo, (erro, info) => {
-    //     if (erro) {
-    //         console.log('ERRO: ', erro);
-    //         return res.status(500).json({ message: erro.message || 'Internal Error' });
-    //     }
+    (req, res) => {
 
-    //     console.log(info)
-    //     return res.json(info);
-    // });
-    
-});
+        const { path, originalname } = req.file
+        const { email, corpo } = req.body
+
+        enviarEmail(email, corpo, path, originalname, (erro, info) => {
+            if (erro) {
+                console.log('ERRO: ', erro);
+                return res.status(500).json({ message: erro.message || 'Internal Error' });
+            }
+
+            console.log(info)
+            return res.json(info);
+        });
+        
+    }
+);
 
 module.exports = router;

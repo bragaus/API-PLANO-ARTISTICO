@@ -13,7 +13,7 @@ const storageTypes = {
 
         /** essa função destination é praticamente a mesma coisa que a variavel dest */
         destination: (req, file, callBack) => {
-            callBack(null, path.resolve(__dirname, '..', '..', 'tmp', 'uploads'))
+            callBack(null, path.resolve(__dirname, '..', '..', 'tmp'))
         },
 
         filename: (req, file, callBack) => {
@@ -73,7 +73,7 @@ module.exports = {
      * se não tiver nada em destination
      * sera usado essa variavel
     */
-    dest: path.resolve(__dirname, '..', '..', 'tmp', 'uploads'),
+    dest: path.resolve(__dirname, '..', '..', 'tmp'),
 
     storage: storageTypes[process.env.STORAGE_TYPE],
 
