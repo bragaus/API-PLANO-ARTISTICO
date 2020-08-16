@@ -1,9 +1,16 @@
 const { Router } = require('express');
 const { celebrate, Segments, Joi } = require('celebrate');
+
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+
 const multer = require('multer');
-const multerConfig = require('./config/multer');
+
+const multerS3 = require('./config/multerS3');
+const multerLocal = require('./config/multerLocal');
+
+const compressor = require('./utils/compressorDeImagens');
+
 const router = Router();
 
 const postarArte = require('./controllers/postarArte');
@@ -81,22 +88,70 @@ router.get('/ilustracao', listarIlustracoes);
 router.get('/arteDeCapa', listarArteDeCapa);
 router.get('/colagem', listarColagens);
 
+const uploadLocal = multerLocal.single('file');
+const uploadMulter = multerS3.single('file');
+
 // Rota para postar arte individual
-router.post('/postarArte',
+router.post('/postarArte',  (req, res, next) => {
+    console.log(req.file);
 
-    verificarToken,
+    // // chama o primeiro multer
+    uploadMulter(req, res, () => {
+          // guarda o endereço do ficheiro
+          req.multerS3Files = req.file;
+          console.log(req.multerS3Files)
+   
+          // chama o segundo multer (sequencialmente)
+          uploadLocal(req, res, () => {
+  
+            // guarda o endereço do ficheiro
+            req.multerLocalFiles = req.file;
+            console.log(req.multerLocalFiles)
 
-    // upload
-    multer(multerConfig).single('file'),
+            // deixa o express ir para o próximo middleware
+            // next();
+          })
+        }
+    )},
+
+    // verificarToken,
+
+    // localMulter((req, res) => {
+    //     // guarda o endereço do ficheiro
+    //     req.multerLocalFiles = req.files;
+ 
+    //     // chama o segundo multer (sequencialmente)
+    //     multerS3(req, res, () => {
+
+    //       // guarda o endereço do ficheiro
+    //       req.multerS3Files = req.files;
+    //       // deixa o express ir para o próximo middleware
+    //       next();
+    //     })
+    //   }
+    // ),
 
     // validação de dados
-    celebrate({
-        [Segments.BODY]: Joi.object().keys({
-            titulo: Joi.string().required().max(30),
-            desc: Joi.string().required().max(500),
-            tipo: Joi.string().required()
-        })
-    }),    
+    // celebrate({
+    //     [Segments.BODY]: Joi.object().keys({
+    //         titulo: Joi.string().required().max(30),
+    //         desc: Joi.string().allow(null, '').max(500),
+    //         tipo: Joi.string().required()
+    //     })
+    // }),    
+
+    // Upload local
+    // multerLocal.single('file'),
+
+    // upload S3
+    // multer(multerConfig).single('file'),
+
+    // (req, res, next) => {
+    //     // Mandando a imagem para compressão
+    //     // vai retornar a promise como o novo caminho como resultado
+    //     compressor.compressImage(req.file, 500)
+    //     next();
+    // },
 
     // inserção no banco de dados
     postarArte
@@ -108,12 +163,12 @@ router.post('/postarArteFrenteVerso',
 
     verificarToken,
 
-    multer(multerConfig).array('file', 3),
+    // multer(multerConfig).array('file', 3),
 
     celebrate({
         [Segments.BODY]: Joi.object().keys({
             titulo: Joi.string().required(),
-            desc: Joi.string().required(),
+            desc: Joi.string().allow(null, '').max(500),
             tipo: Joi.string().required()
         })
     }), 
@@ -125,7 +180,7 @@ router.post('/postarArteFrenteVerso',
 router.post('/email',
 
     // upload
-    multer(multerConfig).single('file'),
+    // multer(multerConfig).single('file'),
 
     (req, res) => {
 
