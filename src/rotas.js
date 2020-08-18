@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const { celebrate, Segments, Joi } = require('celebrate');
+const path = require('path');
 
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
@@ -89,30 +90,32 @@ router.get('/arteDeCapa', listarArteDeCapa);
 router.get('/colagem', listarColagens);
 
 const uploadLocal = multerLocal.single('file');
-const uploadMulter = multerS3.single('file');
+const uploadS3 = multerS3.single('file');
 
 // Rota para postar arte individual
-router.post('/postarArte',  (req, res, next) => {
-    console.log(req.file);
+router.post('/postarArte',  
 
-    // // chama o primeiro multer
-    uploadMulter(req, res, () => {
-          // guarda o endereço do ficheiro
-          req.multerS3Files = req.file;
-          console.log(req.multerS3Files)
-   
-          // chama o segundo multer (sequencialmente)
-          uploadLocal(req, res, () => {
-  
-            // guarda o endereço do ficheiro
-            req.multerLocalFiles = req.file;
-            console.log(req.multerLocalFiles)
+    // (req, res, next) => {
 
-            // deixa o express ir para o próximo middleware
-            // next();
-          })
-        }
-    )},
+    //     // chama o primeiro multer
+    //     uploadLocal(req, res, () => {
+    //         // guarda o endereço do ficheiro
+    //         req.multerS3Files = req.file;
+    //         //   console.log(req.multerS3Files)
+    
+    //         // chama o segundo multer (sequencialmente)
+    //         uploadS3(req, res, () => {
+    
+    //             // guarda o endereço do ficheiro
+    //             req.multerLocalFiles = req.file;
+    //             // console.log(req.multerLocalFiles)
+
+    //             // deixa o express ir para o próximo middleware
+    //             next();
+    //         })
+    //     }
+
+    // )},
 
     // verificarToken,
 
@@ -143,15 +146,20 @@ router.post('/postarArte',  (req, res, next) => {
     // Upload local
     // multerLocal.single('file'),
 
-    // upload S3
+    // // upload S3
     // multer(multerConfig).single('file'),
 
-    // (req, res, next) => {
-    //     // Mandando a imagem para compressão
-    //     // vai retornar a promise como o novo caminho como resultado
-    //     compressor.compressImage(req.file, 500)
-    //     next();
-    // },
+    multerS3.single('file'),    
+
+    (req, res, next) => {
+        // Mandando a imagem para compressão
+        // vai retornar a promise como o novo caminho como resultado
+        compressor.compressImage(req.file, 500).then(arquivoBase64 => {
+            
+            console.log(arquivoBase64)
+        })
+        // next();
+    },
 
     // inserção no banco de dados
     postarArte

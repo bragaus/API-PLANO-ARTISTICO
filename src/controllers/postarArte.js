@@ -1,24 +1,24 @@
 const conexao = require('../models/conexao');
 
 function postarArte(req, resultado) {
-    console.log(req.file);
+    // console.log(req.file);
     
-    // const { titulo, desc: descricao, tipo } = req.body;
+    const { titulo, desc: descricao, tipo } = req.body;
 
-    // const { 
-    //     originalname: nomeOriginal, 
-    //     location: url, 
-    //     key: chave, 
-    //     size: tamanhoArquivo 
-    // } = req.file;
+    const { 
+        originalname: nomeOriginal, 
+        location: url, 
+        key: chave, 
+        size: tamanhoArquivo 
+    } = req.file;
 
-    // valores = [
-    //     [titulo, nomeOriginal, chave, descricao, tipo, url, tamanhoArquivo]
-    // ]
+    valores = [
+        [titulo, nomeOriginal, chave, descricao, tipo, url, tamanhoArquivo]
+    ]
 
-    // conexao.query(`INSERT INTO postagem(titulo, nomeOriginal, chave, descricao, tipo, url, tamanhoArquivo) VALUES (?)`, valores, (req, res) => {
-    //     return resultado.json()
-    // });    
+    conexao.query(`INSERT INTO postagem(titulo, nomeOriginal, chave, descricao, tipo, url, tamanhoArquivo) VALUES (?)`, valores, (req, res) => {
+        return resultado.json()
+    });    
 
 };
 
