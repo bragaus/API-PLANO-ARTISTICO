@@ -6,7 +6,7 @@ exports.compressImage = (file, size) => {
 
     const caminho = path.resolve(__dirname, '..', '..', 'images', file.key);
 
-    const newPath = caminho.split('.')[0] + '.webp';    
+    // const newPath = caminho.split('.')[0] + '.webp';
 
     const arquivo = fs.createWriteStream(caminho);
 
@@ -36,12 +36,16 @@ exports.compressImage = (file, size) => {
      
                 });
     
-                fs.writeFile(newPath, data, (err) => {
-                    if (err) throw err;
-                });
+                // Função para criar o arquivo em um diretorio:
+                // fs.writeFile(newPath, data, (err) => {
+                //     if (err) throw err;
+                // });
     
+                const arquivoBase64 = new Buffer.from(data).toString('base64');
+                return arquivoBase64
+
                 // retornando novo caminho
-                return newPath;
+                // return newPath;
     
             })            
         })
