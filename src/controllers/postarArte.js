@@ -1,7 +1,6 @@
 const conexao = require('../models/conexao');
 
 function postarArte(req, resultado) {
-    // console.log(req.file);
     
     const { titulo, desc: descricao, tipo } = req.body;
 

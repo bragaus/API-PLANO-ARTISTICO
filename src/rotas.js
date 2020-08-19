@@ -152,13 +152,15 @@ router.post('/postarArte',
     multerS3.single('file'),    
 
     (req, res, next) => {
-        // Mandando a imagem para compressão
-        // vai retornar a promise como o novo caminho como resultado
-        compressor.compressImage(req.file, 500).then(arquivoBase64 => {
+
+        compressor.compressImage(req.file, 500)
+        .then(arquivoBase64 => {
             
-            console.log(arquivoBase64)
-        })
-        // next();
+            req.arquivoBase64 = arquivoBase64
+            console.log(req.arquivoBase64)
+            next();
+        });
+        
     },
 
     // inserção no banco de dados
