@@ -14,6 +14,9 @@ const compressor = require('./utils/compressorDeImagens');
 
 const router = Router();
 
+const ArtworkController = require('./controllers/ArtworkController');
+const artworkController = new ArtworkController();
+
 const postarArte = require('./controllers/postarArte');
 const deletarArte = require('./controllers/deletarArte');
 const postarArteFrenteVerso = require('./controllers/postarArteFrenteVerso');
@@ -23,6 +26,8 @@ const listarArteDeCapa = require('./controllers/listarArteDeCapa');
 const listarColagens = require('./controllers/listarColagens');
 const modificarArtes = require('./controllers/modificarArtes');
 const enviarEmail = require('./utils/enviadorDeEmail');
+const listarBlobs = require('./controllers/listarBlobs');
+
 
 // Função para verificar autenticidade do token
 function verificarToken(req, res, next) { 
@@ -89,6 +94,10 @@ router.get('/ilustracao', listarIlustracoes);
 router.get('/arteDeCapa', listarArteDeCapa);
 router.get('/colagem', listarColagens);
 
+router.get('/blobs', listarBlobs);
+
+router.get('/artworks', artworkController.index);
+
 const uploadLocal = multerLocal.single('file');
 const uploadS3 = multerS3.single('file');
 
@@ -119,20 +128,6 @@ router.post('/postarArte',
 
     // verificarToken,
 
-    // localMulter((req, res) => {
-    //     // guarda o endereço do ficheiro
-    //     req.multerLocalFiles = req.files;
- 
-    //     // chama o segundo multer (sequencialmente)
-    //     multerS3(req, res, () => {
-
-    //       // guarda o endereço do ficheiro
-    //       req.multerS3Files = req.files;
-    //       // deixa o express ir para o próximo middleware
-    //       next();
-    //     })
-    //   }
-    // ),
 
     // validação de dados
     // celebrate({
@@ -143,21 +138,15 @@ router.post('/postarArte',
     //     })
     // }),    
 
-    // Upload local
-    // multerLocal.single('file'),
-
-    // // upload S3
-    // multer(multerConfig).single('file'),
 
     multerS3.single('file'),    
 
     (req, res, next) => {
 
         compressor.compressImage(req.file, 500)
-        .then(arquivoBase64 => {
+        .then(arquivoBlob => {
             
-            req.arquivoBase64 = arquivoBase64
-            console.log(req.arquivoBase64)
+            req.arquivoBlob = arquivoBlob
             next();
         });
         

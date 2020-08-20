@@ -11,11 +11,13 @@ function postarArte(req, resultado) {
         size: tamanhoArquivo 
     } = req.file;
 
+    const arquivoBlob = req.arquivoBlob
+
     valores = [
-        [titulo, nomeOriginal, chave, descricao, tipo, url, tamanhoArquivo]
+        [titulo, nomeOriginal, chave, descricao, tipo, url, tamanhoArquivo, arquivoBlob]
     ]
 
-    conexao.query(`INSERT INTO postagem(titulo, nomeOriginal, chave, descricao, tipo, url, tamanhoArquivo) VALUES (?)`, valores, (req, res) => {
+    conexao.query(`INSERT INTO postagem(titulo, nomeOriginal, chave, descricao, tipo, url, tamanhoArquivo, arquivoBlob) VALUES (?)`, valores, (req, res) => {
         return resultado.json()
     });    
 
