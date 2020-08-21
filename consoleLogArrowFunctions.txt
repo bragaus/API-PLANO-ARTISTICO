@@ -1,0 +1,20 @@
+{
+  fieldname: 'file',
+  originalname: '1a776af7fdb92a776282ea0c1d4d2d70.jpg',
+  encoding: '7bit',
+  mimetype: 'image/jpeg',
+  destination: 'D:\\Desktop\\planoartistico\\planoartistico-backend\\images',
+  filename: '1598005185946-1a776af7fdb92a776282ea0c1d4d2d70.jpg',
+  path: 'D:\\Desktop\\planoartistico\\planoartistico-backend\\images\\1598005185946-1a776af7fdb92a776282ea0c1d4d2d70.jpg',
+  size: 65358
+}
+{
+  fieldname: 'file',
+  originalname: '1a776af7fdb92a776282ea0c1d4d2d70.jpg',
+  encoding: '7bit',
+  mimetype: 'image/jpeg',
+  destination: 'D:\\Desktop\\planoartistico\\planoartistico-backend\\images',
+  filename: '1598005185946-1a776af7fdb92a776282ea0c1d4d2d70.jpg',
+  path: 'D:\\Desktop\\planoartistico\\planoartistico-backend\\images\\1598005185946-1a776af7fdb92a776282ea0c1d4d2d70.jpg',
+  size: 65358
+}
