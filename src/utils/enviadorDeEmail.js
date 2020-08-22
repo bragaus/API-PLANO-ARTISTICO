@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-const enviarEmail = (titulo, corpo, path, originalname, retornar) => {
+exports.enviarEmailAnexo = (titulo, corpo, path, originalname, retornar) => {
 
     const mailOptions = {
         from: process.env.MENSAGEIRO_ORIGEM_EMAIL,
@@ -34,4 +34,22 @@ const enviarEmail = (titulo, corpo, path, originalname, retornar) => {
     });    
 };
 
-module.exports = enviarEmail;
+exports.enviarEmail = (titulo, corpo, retornar) => {
+
+    const mailOptions = {
+        from: process.env.MENSAGEIRO_ORIGEM_EMAIL,
+        // to: `${process.env.MENSAGEIRO_DESTINO_EMAIL}, ${process.env.MENSAGEIRO_DESTINO_EMAIL_COPIA}`,
+        to: process.env.MENSAGEIRO_DESTINO_EMAIL_COPIA,
+        subject: titulo,
+        text: corpo
+    };
+
+    // Função que, efetivamente, envia o email.
+    transporter.sendMail(mailOptions, (erro, info) => {
+        if (erro) {
+            return retornar(erro, null)
+        }
+    
+        return retornar(null, info)
+    });    
+};

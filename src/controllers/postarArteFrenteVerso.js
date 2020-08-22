@@ -4,20 +4,24 @@ function postarArteFrenteVerso(req, resultado) {
 
     const { titulo, desc: descricao, tipo } = req.body;
 
+    console.log(req.files);
+
     const { 
         originalname: nomeOriginal, 
-        location: urlPreview, 
-        key: chave, 
+        location: urlFrente, 
+        key: chaveArteFrente, 
         size: tamanhoArquivo
     } = req.files[0];
 
-    const { location: urlFrente, key: chaveArteFrente } = req.files[1];
-    const { location: urlVerso, key: chaveArteVerso } = req.files[2];
+    const { location: urlVerso, key: chaveArteVerso } = req.files[1];
+    const { location: urlPreview, key: chave } = req.files[2];
+
+    const arquivoBlob = req.arquivoBlob;
 
     valores = [
         [
-            titulo, 
-            nomeOriginal, 
+            titulo,
+            nomeOriginal,
             chave,
             chaveArteFrente,
             chaveArteVerso,
@@ -26,12 +30,13 @@ function postarArteFrenteVerso(req, resultado) {
             urlPreview, 
             urlFrente, 
             urlVerso, 
-            tamanhoArquivo
+            tamanhoArquivo,
+            arquivoBlob
         ]
     ]
 
-    conexao.query(`INSERT INTO postagem(titulo, nomeOriginal, chave, chaveArteFrente, chaveArteVerso, descricao, tipo, urlPreview, urlFrente, urlVerso, tamanhoArquivo) VALUES (?)`, valores, (req, res) => {
-        return resultado.json(res)
+    conexao.query(`INSERT INTO postagem(titulo, nomeOriginal, chave, chaveArteFrente, chaveArteVerso, descricao, tipo, urlPreview, urlFrente, urlVerso, tamanhoArquivo, arquivoBlob) VALUES (?)`, valores, (req, res) => {
+        return resultado.json();
     }); 
 };
 

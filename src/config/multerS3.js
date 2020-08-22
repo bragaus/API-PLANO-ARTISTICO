@@ -17,8 +17,6 @@ module.exports=(multer({
         // Nome da Imagem
         key: (req, file, callBack) => {
 
-            console.log(file)
-
             /** criar um hash, uma quantidade de caracteres aleatorios 
              *  para anexar no inicio do nome da imagem para garantir 
              * que os nomes das imagens nunca se reptam 

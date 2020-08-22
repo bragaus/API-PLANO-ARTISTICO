@@ -25,8 +25,9 @@ const listarIlustracoes = require('./controllers/listarIlustracoes');
 const listarArteDeCapa = require('./controllers/listarArteDeCapa');
 const listarColagens = require('./controllers/listarColagens');
 const modificarArtes = require('./controllers/modificarArtes');
-const enviarEmail = require('./utils/enviadorDeEmail');
 const listarBlobs = require('./controllers/listarBlobs');
+
+const {enviarEmail, enviarEmailAnexo} = require('./utils/enviadorDeEmail');
 
 
 // Função para verificar autenticidade do token
@@ -87,59 +88,14 @@ router.delete('/deletarArte/:id', verificarToken, deletarArte);
 router.post('/controlesDaArte', verificarToken, modificarArtes);
 
 // Rota para retornar uma arte específica
-router.get('/visualizarArte/:id', listarArteUnica)
-
-// Rota para retornar as artes de cada seção
-router.get('/ilustracao', listarIlustracoes);
-router.get('/arteDeCapa', listarArteDeCapa);
-router.get('/colagem', listarColagens);
-
-router.get('/blobs', listarBlobs);
+router.get('/visualizarArte/:id', listarArteUnica);
 
 router.get('/artworks', artworkController.index);
-
-const uploadLocal = multerLocal.single('file');
-const uploadS3 = multerS3.single('file');
 
 // Rota para postar arte individual
 router.post('/postarArte',  
 
-    // (req, res, next) => {
-
-    //     // chama o primeiro multer
-    //     uploadLocal(req, res, () => {
-    //         // guarda o endereço do ficheiro
-    //         req.multerS3Files = req.file;
-    //         //   console.log(req.multerS3Files)
-    
-    //         // chama o segundo multer (sequencialmente)
-    //         uploadS3(req, res, () => {
-    
-    //             // guarda o endereço do ficheiro
-    //             req.multerLocalFiles = req.file;
-    //             // console.log(req.multerLocalFiles)
-
-    //             // deixa o express ir para o próximo middleware
-    //             next();
-    //         })
-    //     }
-
-    // )},
-
-    // verificarToken,
-
-
-    // validação de dados
-    // celebrate({
-    //     [Segments.BODY]: Joi.object().keys({
-    //         titulo: Joi.string().required().max(30),
-    //         desc: Joi.string().allow(null, '').max(500),
-    //         tipo: Joi.string().required()
-    //     })
-    // }),    
-
-
-    multerS3.single('file'),    
+    multerS3.single('file'),
 
     (req, res, next) => {
 
@@ -162,7 +118,18 @@ router.post('/postarArteFrenteVerso',
 
     verificarToken,
 
-    // multer(multerConfig).array('file', 3),
+    multerS3.array('file', 3),
+
+    (req, res, next) => {
+
+        compressor.compressImage(req.files[2], 500)
+        .then(arquivoBlob => {
+            
+            req.arquivoBlob = arquivoBlob
+            next();
+        });
+        
+    },    
 
     celebrate({
         [Segments.BODY]: Joi.object().keys({
@@ -175,24 +142,45 @@ router.post('/postarArteFrenteVerso',
     postarArteFrenteVerso
 );
 
-// Rota para enviar email
-router.post('/email',
+// Rota para enviar email com anexo
+router.post('/emailanexo',
+
+
 
     // upload
-    // multer(multerConfig).single('file'),
+    multerLocal.single('file'),
 
     (req, res) => {
-
+        
         const { path, originalname } = req.file
+
         const { email, corpo } = req.body
 
-        enviarEmail(email, corpo, path, originalname, (erro, info) => {
+        enviarEmailAnexo(email, corpo, path, originalname, (erro, info) => {
             if (erro) {
                 console.log('ERRO: ', erro);
                 return res.status(500).json({ message: erro.message || 'Internal Error' });
             }
 
-            console.log(info)
+            return res.json(info);
+        });
+        
+    }
+);
+
+// Rota para enviar email
+router.post('/email',
+
+    (req, res) => {
+
+        const { email, corpo } = req.body
+
+        enviarEmail(email, corpo, (erro, info) => {
+            if (erro) {
+                console.log('ERRO: ', erro);
+                return res.status(500).json({ message: erro.message || 'Internal Error' });
+            }
+            
             return res.json(info);
         });
         

@@ -1,7 +1,8 @@
 const fs = require('fs'), 
     sharp = require('sharp'), 
     https = require('https'), 
-    path = require('path');
+    path = require('path'),
+    blobUtil = require('blob-util');
 
 exports.compressImage = (file, size) => {
 
@@ -36,9 +37,6 @@ exports.compressImage = (file, size) => {
                         }
         
                     });
-        
-                    // const arquivoBase64 = new Buffer.from(data).toString('base64');
-                    // return resolve(arquivoBase64)
 
                     const blob = new Buffer.from(data);
                     return resolve(blob)
