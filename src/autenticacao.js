@@ -51,15 +51,16 @@ module.exports = function(passport) {
 
 	// Retornar os dados do usuário de acordo com o ID do usuário guardado no token
 	passport.use(new JWTStrategy({
-        jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-        secretOrKey: process.env.NODE_KEY
-    },
-    function (jwtPayload, cb) {
-		conexao.query('SELECT * FROM Login WHERE ID = ?', [jwtPayload.id], (erro, usuario) => {
-			return cb(null, usuario);
-		})
-	}
-	
-));	
+			jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+			secretOrKey: process.env.NODE_KEY
+		},
 		
- };
+		function (jwtPayload, cb) {
+			conexao.query('SELECT * FROM Login WHERE ID = ?', [jwtPayload.id], (erro, usuario) => {
+				return cb(null, usuario);
+			})
+		}
+	
+	));	
+		
+};

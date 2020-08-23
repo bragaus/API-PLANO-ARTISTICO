@@ -1,8 +1,7 @@
 const fs = require('fs'), 
     sharp = require('sharp'), 
     https = require('https'), 
-    path = require('path'),
-    blobUtil = require('blob-util');
+    path = require('path')
 
 exports.compressImage = (file, size) => {
 

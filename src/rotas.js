@@ -1,11 +1,8 @@
 const { Router } = require('express');
 const { celebrate, Segments, Joi } = require('celebrate');
-const path = require('path');
 
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
-
-const multer = require('multer');
 
 const multerS3 = require('./config/multerS3');
 const multerLocal = require('./config/multerLocal');
@@ -21,11 +18,7 @@ const postarArte = require('./controllers/postarArte');
 const deletarArte = require('./controllers/deletarArte');
 const postarArteFrenteVerso = require('./controllers/postarArteFrenteVerso');
 const listarArteUnica = require('./controllers/listarArteUnica');
-const listarIlustracoes = require('./controllers/listarIlustracoes');
-const listarArteDeCapa = require('./controllers/listarArteDeCapa');
-const listarColagens = require('./controllers/listarColagens');
 const modificarArtes = require('./controllers/modificarArtes');
-const listarBlobs = require('./controllers/listarBlobs');
 
 const {enviarEmail, enviarEmailAnexo} = require('./utils/enviadorDeEmail');
 
@@ -44,6 +37,7 @@ function verificarToken(req, res, next) {
         const token = bearer[1];
 
         jwt.verify(token, process.env.NODE_KEY, (err) => {
+
             if(err){
                 res.status(403).send('token inválido');
             } else {
@@ -69,15 +63,23 @@ router.post('/login', function (req, res, next) {
             });
         }
 
-       req.login(user, {session: false}, (err) => {
-           if (err) {
-               res.send(err);
-		   }	   
-           // Gerando o token
-           const token = jwt.sign(JSON.stringify(user.ID), process.env.NODE_KEY);
-           return res.json({user, token});
+        req.login(user, {session: false}, (err) => {
+            if (err) {
+                res.send(err);
+            }
+
+            const payload = {
+                id: user.ID,
+                // expire: Date.now() + 1000 * 60 * 60 * 24 * 7, //7 days
+            };            
+                
+            // Gerando o token
+            // const token = jwt.sign(JSON.stringify(user.ID), process.env.NODE_KEY);
+            const token = jwt.sign(JSON.stringify(payload), process.env.NODE_KEY);
+            
+            return res.json({user, token});
         });
-        
+
     })(req, res, next);
 });
 
@@ -90,6 +92,7 @@ router.post('/controlesDaArte', verificarToken, modificarArtes);
 // Rota para retornar uma arte específica
 router.get('/visualizarArte/:id', listarArteUnica);
 
+// Rota para listar todas as artes do banco
 router.get('/artworks', artworkController.index);
 
 // Rota para postar arte individual
@@ -144,8 +147,6 @@ router.post('/postarArteFrenteVerso',
 
 // Rota para enviar email com anexo
 router.post('/emailanexo',
-
-
 
     // upload
     multerLocal.single('file'),
