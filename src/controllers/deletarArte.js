@@ -34,7 +34,7 @@ function deletarArteDoCDN(id) {
 
                 // percorre todas as chaves
                 chaves.forEach((chave) => {
-                    const parametros = { Bucket: process.env.DB_NAME, Key: chave }
+                    const parametros = { Bucket: process.env.BUCKET_NAME, Key: chave }
                     s3.deleteObject(parametros, function (erro) {
                         if (erro) {
                             console.log(erro, erro.stack);
@@ -44,7 +44,7 @@ function deletarArteDoCDN(id) {
                
             } else {
                 const chave = resultado[0].chave
-                const parametros = { Bucket: process.env.DB_NAME, Key: chave }
+                const parametros = { Bucket: process.env.BUCKET_NAME, Key: chave }
                 s3.deleteObject(parametros, function (erro) {
                     if (erro) {
                         console.log(erro, erro.stack);

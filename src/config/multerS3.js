@@ -9,7 +9,7 @@ module.exports=(multer({
     storage: multerS3({
 
         s3: new aws.S3(),
-        bucket: 'planoart',
+        bucket: process.env.BUCKET_NAME,
         contentType: multerS3.AUTO_CONTENT_TYPE,
 
         acl: 'public-read',
