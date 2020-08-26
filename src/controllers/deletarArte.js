@@ -20,7 +20,7 @@ function deletarArteDoCDN(id) {
             }
 
             // se for arte frente e verso
-            if (resultado[0].chaveArteFrente !== null) {
+            if (typeof resultado[0].chaveArteFrente === "undefined" || resultado[0].chaveArteFrente !== null) {
                 const chaveArteFrente = resultado[0].chaveArteFrente
                 const chaveArteVerso = resultado[0].chaveArteVerso
                 const chave = resultado[0].chave
