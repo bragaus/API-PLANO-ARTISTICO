@@ -111,6 +111,14 @@ router.post('/postarArte',
         
     },
 
+    celebrate({
+        [Segments.BODY]: Joi.object().keys({
+            titulo: Joi.string().allow(null, '').max(300),
+            desc: Joi.string().allow(null, '').max(500),
+            tipo: Joi.string().required()
+        })
+    }),
+
     // inserção no banco de dados
     postarArte
     
@@ -136,7 +144,7 @@ router.post('/postarArteFrenteVerso',
 
     celebrate({
         [Segments.BODY]: Joi.object().keys({
-            titulo: Joi.string().required(),
+            titulo: Joi.string().allow(null, '').max(300),
             desc: Joi.string().allow(null, '').max(500),
             tipo: Joi.string().required()
         })
