@@ -5,10 +5,10 @@ class ArtworkController {
         conexao.query('SELECT * FROM postagem ORDER BY ID DESC', (req, res) => {
 
             // convertendo blob para base64
-            const data = res.map((e) => {
+            const data = res ? res.map((e) => {
                 e.arquivoBlob = new Buffer.from(e.arquivoBlob).toString('base64');
                 return e
-            })
+            }) : []
 
             return resposta.json(data);
         });
