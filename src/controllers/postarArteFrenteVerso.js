@@ -16,7 +16,9 @@ function postarArteFrenteVerso(req, resultado) {
     const { location: urlVerso, key: chaveArteVerso } = req.files[1];
     const { location: urlPreview, key: chave } = req.files[2];
 
-    const arquivoBlob = req.arquivoBlob;
+    const blobPreview = req.blobPreview;
+    const blobFrente = req.blobFrente;
+    const blobVerso = req.blobVerso;
 
     valores = [
         [
@@ -31,11 +33,13 @@ function postarArteFrenteVerso(req, resultado) {
             urlFrente, 
             urlVerso, 
             tamanhoArquivo,
-            arquivoBlob
+            blobPreview,
+            blobFrente,
+            blobVerso
         ]
     ]
 
-    conexao.query(`INSERT INTO postagem(titulo, nomeOriginal, chave, chaveArteFrente, chaveArteVerso, descricao, tipo, urlPreview, urlFrente, urlVerso, tamanhoArquivo, arquivoBlob) VALUES (?)`, valores, (req, res) => {
+    conexao.query(`INSERT INTO postagem(titulo, nomeOriginal, chave, chaveArteFrente, chaveArteVerso, descricao, tipo, urlPreview, urlFrente, urlVerso, tamanhoArquivo, blobPreview, blobFrente, blobVerso) VALUES (?)`, valores, (req, res) => {
         return resultado.json();
     }); 
 };

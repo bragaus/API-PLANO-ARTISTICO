@@ -94,6 +94,7 @@ router.get('/visualizarArte/:id', listarArteUnica);
 
 // Rota para listar todas as artes do banco
 router.get('/artworks', artworkController.index);
+router.get('/artworks/:chave', artworkController.artwork);
 
 // Rota para postar arte individual
 router.post('/postarArte',  
@@ -105,7 +106,7 @@ router.post('/postarArte',
         compressor.compressImage(req.file, 500)
         .then(arquivoBlob => {
             
-            req.arquivoBlob = arquivoBlob
+            req.blobPreview = arquivoBlob
             next();
         });
         
@@ -133,12 +134,32 @@ router.post('/postarArteFrenteVerso',
 
     (req, res, next) => {
 
-        compressor.compressImage(req.files[2], 500)
-        .then(arquivoBlob => {
+        compressor.compressImage(req.files[0], 500)
+        .then(blobFrente => {
             
-            req.arquivoBlob = arquivoBlob
-            next();
-        });
+            req.blobFrente = blobFrente
+
+            compressor.compressImage(req.files[1], 500)
+            .then(blobVerso => {
+                
+                req.blobVerso = blobVerso
+
+                compressor.compressImage(req.files[2], 500)
+                .then(blobPreview => {
+                    
+                    req.blobPreview = blobPreview
+                    next();
+
+                });                   
+            });              
+        });                   
+
+        // compressor.compressImage(req.files[2], 500)
+        // .then(arquivoBlob => {
+            
+        //     req.arquivoBlob = arquivoBlob
+        //     next();
+        // });
         
     },    
 
