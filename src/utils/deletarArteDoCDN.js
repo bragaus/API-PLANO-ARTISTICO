@@ -2,16 +2,8 @@ const conexao = require('../models/conexao');
 const aws = require('aws-sdk');
 const s3 = new aws.S3();
 
-function deletarArte(req, resultado) {
-    const id = req.params.id
-    deletarArteDoCDN(id)    
-    conexao.query('DELETE FROM postagem WHERE ID = ?', id, (req, res) => {      
-        return resultado.json(res)
-    })
-}
-
 // Deletar a arte do CDN
-function deletarArteDoCDN(id) {
+module.exports = function deletarArteDoCDN(id) {
     conexao.query('SELECT chave, chaveArteFrente, chaveArteVerso FROM postagem WHERE ID = ?', id,
         function (erro, resultado) {
             
@@ -53,5 +45,3 @@ function deletarArteDoCDN(id) {
             }
     });
 };
-
-module.exports = deletarArte;

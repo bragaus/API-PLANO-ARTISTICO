@@ -16,7 +16,7 @@ app.use(morgan('dev'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors({credentials: true, origin: process.env.ORIGIN || process.env.ORIGIN2 || process.env.ORIGIN3 || process.env.ORIGIN4 }))
+app.use(cors({credentials: true, origin: process.env.ORIGIN}))
 app.use(router);
 app.use(errors());
 

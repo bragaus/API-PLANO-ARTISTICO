@@ -14,14 +14,7 @@ const router = Router();
 const ArtworkController = require('./controllers/ArtworkController');
 const artworkController = new ArtworkController();
 
-const postarArte = require('./controllers/postarArte');
-const deletarArte = require('./controllers/deletarArte');
-const postarArteFrenteVerso = require('./controllers/postarArteFrenteVerso');
-const listarArteUnica = require('./controllers/listarArteUnica');
-const modificarArtes = require('./controllers/modificarArtes');
-
-const {enviarEmail, enviarEmailAnexo} = require('./utils/enviadorDeEmail');
-
+const { enviarEmail, enviarEmailAnexo } = require('./utils/enviadorDeEmail');
 
 // Função para verificar autenticidade do token
 function verificarToken(req, res, next) { 
@@ -41,7 +34,6 @@ function verificarToken(req, res, next) {
             if(err){
                 res.status(403).send('token inválido');
             } else {
-                console.log('postagem autorizada');
                 next();
             }
         });
@@ -83,21 +75,22 @@ router.post('/login', function (req, res, next) {
     })(req, res, next);
 });
 
-// Rota para deletar arte
-router.delete('/deletarArte/:id', verificarToken, deletarArte);
-
-// Rota para modificar arte
-router.post('/controlesDaArte', verificarToken, modificarArtes);
-
-// Rota para retornar uma arte específica
-router.get('/visualizarArte/:id', listarArteUnica);
-
-// Rota para listar todas as artes do banco
+// Listar todas as artes.
 router.get('/artworks', artworkController.index);
+
+// Listar arte de acordo com a chave.
 router.get('/artworks/:chave', artworkController.artwork);
 
-// Rota para postar arte individual
-router.post('/postarArte',  
+// Deletar Arte.
+router.delete('/artworks/:id', verificarToken, artworkController.delete);
+
+// Rota para modificar arte.
+router.post('/artworks/update', verificarToken, artworkController.upadte);
+
+// Postar arte única.
+router.post('/artworks/post',
+
+    verificarToken,
 
     multerS3.single('file'),
 
@@ -121,12 +114,12 @@ router.post('/postarArte',
     }),
 
     // inserção no banco de dados
-    postarArte
+    artworkController.post
     
 );
 
-// Rota para postar arte com frente e verso
-router.post('/postarArteFrenteVerso',
+// Postar arte frente e verso.
+router.post('/artworks/posts',
 
     verificarToken,
 
@@ -152,14 +145,7 @@ router.post('/postarArteFrenteVerso',
 
                 });                   
             });              
-        });                   
-
-        // compressor.compressImage(req.files[2], 500)
-        // .then(arquivoBlob => {
-            
-        //     req.arquivoBlob = arquivoBlob
-        //     next();
-        // });
+        });
         
     },    
 
@@ -171,7 +157,7 @@ router.post('/postarArteFrenteVerso',
         })
     }), 
 
-    postarArteFrenteVerso
+    artworkController.posts
 );
 
 // Rota para enviar email com anexo
